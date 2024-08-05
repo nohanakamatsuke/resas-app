@@ -15,14 +15,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const title = metadata.title || '都道府県人口グラフ'
-  const description = metadata.description || '都道府県ごとの人口構成が取得できるグラフです'
+  const title = metadata.title || "都道府県人口グラフ";
+  const description =
+    metadata.description || "都道府県ごとの人口構成が取得できるグラフです";
 
   return (
     <html lang="en">
       <Head>
-      <title>{title as string}</title>
-      <meta name="description" content={description as string} />
+        <title>{title as string}</title>
+        <meta name="description" content={description as string} />
       </Head>
       <body className={inter.className}>
         <header className="text-3xl p-5">
