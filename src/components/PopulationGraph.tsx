@@ -89,13 +89,15 @@ export default function PopulationGraph({
           type="number"
           domain={[1970, 2020]}
           ticks={[1970, 1980, 1990, 2000, 2010, 2020]}
+          tickFormatter={(value) => (value === 1970 ? "" : value)}
         />
         <YAxis
           width={100}
           tickFormatter={(value) =>
-            new Intl.NumberFormat("ja-JP").format(value)
+            value === 0 ? "" : new Intl.NumberFormat("ja-JP").format(value)
           }
           domain={[0, yAxisMax]}
+          tickCount={6} // メモリの数
         />
         <Tooltip />
         <Legend verticalAlign="bottom" align="center" layout="horizontal" />
