@@ -1,52 +1,57 @@
-'use client';
+"use client";
 
+import PopulationGraph from "@/components/PopulationGraph";
+import PopulationTypeSelector from "@/components/PopulationTypeSelector";
+import PrefectureSelector from "@/components/PrefectureSelector";
+import { fetchPopulationData, fetchPrefectures } from "@/lib/api";
+import { populationType } from "@/types";
 
-import { fetchPrefectures } from "../../lib/api";
 import { useState, useEffect } from "react";
 
 const Home = () => {
-  const [prefectures, setPrefectures] = useState<{ prefCode: number; prefName: string }[]>([]);
-  const [selectedPrefecture, setSelectedPrefecture] = useState<number | null>(null);
+  const [selectedPrefectures, setSelectedPrefectures] = useState<number[]>([]);
+  const [populationType, setPopulationType] =
+    useState<populationType>("総人口");
   const [isLoading, setIsLoading] = useState(true);
-
-
   useEffect(() => {
-    const getPrefectures = async () => {
-      const data = await fetchPrefectures();
-      setPrefectures(data);
-      setIsLoading(false);
+    const initializeData = async () => {
+      try {
+        const prefectures = await fetchPrefectures();
+        // 他の初期化処理があればここに追加
+      } catch (error) {
+        console.error("初期化に失敗しました:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-    getPrefectures();
+
+    initializeData();
   }, []);
-
-  const handleCheckboxChange = (prefCode: number) => {
-    setSelectedPrefecture(prefCode);
-  };
-
-  if(isLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-
   return (
     <main className="flex min-h-screen flex-col items-center p-8">
-      <div className="text-2xl font-bold mb-9 border border-white rounded p-2">都道府県一覧</div>
-      <div className="flex flex-wrap justify-center max-w-8xl gap-4">
-        {prefectures?.map((prefecture) => (
-          <div key={prefecture.prefCode} className="flex items-center w-40 p-2 gap-3">
-            <input
-              type="checkbox"
-              id={`pref-${prefecture.prefCode}`}
-              name="prefecture"
-              value={prefecture.prefCode}
-              onChange={() => handleCheckboxChange(prefecture.prefCode)}
-              className="w-5 h-5"
-            />
-            <label htmlFor={`pref-${prefecture.prefCode}`}>{prefecture.prefName}</label>
-          </div>
-        ))}
+      <div className="text-xl font-bold mb-9 border border-white rounded p-2">
+        都道府県一覧
       </div>
-      
+      <div className="flex flex-wrap justify-center max-w-10xl gap-4">
+        <PrefectureSelector
+          selectedPrefectures={selectedPrefectures}
+          onSelectionChange={setSelectedPrefectures}
+        />
+        <div className="flex gap-10">
+          <PopulationGraph
+            selectedPrefectures={selectedPrefectures}
+            populationType={populationType}
+          />
+          <PopulationTypeSelector
+            selectedType={populationType}
+            onTypeChange={setPopulationType}
+          />
+        </div>
+      </div>
     </main>
   );
 };
