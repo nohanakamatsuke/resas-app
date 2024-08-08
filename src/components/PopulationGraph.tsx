@@ -55,37 +55,72 @@ export default function PopulationGraph({
     }
   }, [selectedPrefectures, populationType]);
 
-  if (data.length === 0) {
-    return <p>都道府県を選択してください。</p>;
-  }
+  // 10年ごとのティックを設定
+  const ticks = [1970, 1980, 1990, 2000, 2010, 2020];
 
-  const years = Array.from(
-    new Set(data.flatMap((d) => d.data.map((item) => item.year)))
-  ).sort((a, b) => a - b);
+  // X軸の範囲を1970年から2020年に制限
+  const chartData = data.flatMap((d) =>
+    d.data.filter((item) => item.year >= 1970 && item.year <= 2020)
+  );
+
+  // 最大値を100万単位に丸める関数
+  const roundToMillion = (value: number) => {
+    return Math.ceil(value / 1000000) * 1000000;
+  };
+
+  // データの最大値を取得して丸める
+  const maxDataValue =
+    chartData.length > 0 ? Math.max(...chartData.map((d) => d.value)) : 0;
+  const yAxisMax = roundToMillion(maxDataValue);
+
+  // ダミーデータを追加してY軸を表示させる
+  const dummyData = ticks.map((year) => ({ year, value: 0 }));
 
   return (
     <div className="">
-      <LineChart width={800} height={400}>
+      <LineChart
+        width={800}
+        height={400}
+        data={chartData.length ? chartData : dummyData}
+      >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="year"
           type="number"
-          domain={["dataMin", "dataMax"]}
-          tickCount={10}
+          domain={[1970, 2020]}
+          ticks={[1970, 1980, 1990, 2000, 2010, 2020]}
         />
-        <YAxis />
+        <YAxis
+          width={100}
+          tickFormatter={(value) =>
+            new Intl.NumberFormat("ja-JP").format(value)
+          }
+          domain={[0, yAxisMax]}
+        />
         <Tooltip />
-        <Legend />
-        {data.map((prefData, index) => (
+        <Legend verticalAlign="bottom" align="center" layout="horizontal" />
+        {data.length > 0 ? (
+          data.map((prefData, index) => (
+            <Line
+              key={prefData.prefCode}
+              type="monotone"
+              data={prefData.data.filter(
+                (item) => item.year >= 1970 && item.year <= 2020
+              )}
+              dataKey="value"
+              name={prefData.prefName}
+              stroke={`hsl(${index * 30}, 70%, 50%)`}
+            />
+          ))
+        ) : (
           <Line
-            key={prefData.prefCode}
             type="monotone"
-            data={prefData.data}
+            data={dummyData}
             dataKey="value"
-            name={prefData.prefName}
-            stroke={`hsl(${index * 30}, 70%, 50%)`}
+            stroke="transparent"
+            name="No Data"
           />
-        ))}
+        )}
       </LineChart>
     </div>
   );
