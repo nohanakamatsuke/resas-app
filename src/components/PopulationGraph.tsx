@@ -98,7 +98,7 @@ export default function PopulationGraph({
             tick={{ fontSize: isMobile ? 12 : 16 }} // スマホの時はフォントサイズを小さく
           />
           <YAxis
-            width={80}
+            width={isMobile ? 64 : 80}
             tickFormatter={(value) =>
               value === 0 ? "" : new Intl.NumberFormat("ja-JP").format(value)
             }
@@ -107,7 +107,14 @@ export default function PopulationGraph({
             tickCount={6} // メモリの数
           />
           <Tooltip />
-          <Legend verticalAlign="bottom" align="center" layout="horizontal" />
+          <Legend
+            verticalAlign="bottom"
+            align="center"
+            layout="horizontal"
+            formatter={(value) => (
+              <span style={{ fontSize: isMobile ? 12 : 16 }}>{value}</span>
+            )}
+          />
           {data.length > 0 ? (
             data.map((prefData, index) => (
               <Line

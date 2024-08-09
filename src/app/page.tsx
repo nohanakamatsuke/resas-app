@@ -3,7 +3,7 @@
 import PopulationGraph from "@/components/PopulationGraph";
 import PopulationTypeSelector from "@/components/PopulationTypeSelector";
 import PrefectureSelector from "@/components/PrefectureSelector";
-import { fetchPopulationData, fetchPrefectures } from "@/lib/api";
+import { fetchPrefectures } from "@/lib/api";
 import { populationType } from "@/types";
 
 import { useState, useEffect } from "react";
@@ -36,12 +36,12 @@ const Home = () => {
       <div className="text-xs hidden sm:block md:text-base  mb-3 md:mb-6 border border-white rounded p-1">
         都道府県一覧
       </div>
-      <div className="flex flex-wrap justify-center max-w-15xl gap-4">
+      <div className="flex flex-col justify-center max-w-15xl gap-3">
         <PrefectureSelector
           selectedPrefectures={selectedPrefectures}
           onSelectionChange={setSelectedPrefectures}
         />
-        <div className="md:flex md:flex-row-reverse gap-5 justify-center">
+        <div className="md:flex md:flex-row-reverse gap-3 justify-center">
           <PopulationTypeSelector
             selectedType={populationType}
             onTypeChange={setPopulationType}
