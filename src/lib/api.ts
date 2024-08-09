@@ -35,9 +35,15 @@ export const fetchPopulationData = async (
     const prefData = response.data.result.data.find(
       (d: PopulationData) => d.label === populationType
     );
+    //
+    const prefectures = await fetchPrefectures();
+    const prefName =
+      prefectures.find((pref: any) => pref.prefCode === prefCode)?.prefName ||
+      "Unknown Prefecture";
+
     return {
       prefCode,
-      prefName: response.data.result.prefName,
+      prefName,
       data: prefData.data,
     };
   } catch (error) {
