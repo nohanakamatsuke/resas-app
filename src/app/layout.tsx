@@ -26,8 +26,8 @@ export default function RootLayout({
         <meta name="description" content={description as string} />
       </Head>
       <body className={inter.className}>
-        <header className="text-3xl p-5">
-          <h1>{title as string}</h1>
+        <header className="text-3xl p-5 flex justify-center sm:block ">
+          <h1 className="text-2xl md:text-4xl">{title as string}</h1>
         </header>
         {children}
       </body>
