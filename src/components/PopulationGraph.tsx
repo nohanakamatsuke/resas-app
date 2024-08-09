@@ -37,13 +37,13 @@ export default function PopulationGraph({
       try {
         const newData = await Promise.all(
           selectedPrefectures.map((prefCode) =>
-            fetchPopulationData(prefCode, populationType)
-          )
+            fetchPopulationData(prefCode, populationType),
+          ),
         );
 
         // null値を除外し、型を保証する
         const filteredData = newData.filter(
-          (item): item is PopulationData => item !== null
+          (item): item is PopulationData => item !== null,
         );
         setData(filteredData);
       } catch (error) {
@@ -64,7 +64,7 @@ export default function PopulationGraph({
 
   // X軸の範囲を1970年から2020年に制限
   const chartData = data.flatMap((d) =>
-    d.data.filter((item) => item.year >= 1970 && item.year <= 2020)
+    d.data.filter((item) => item.year >= 1970 && item.year <= 2020),
   );
 
   // 最大値を100万単位に丸める関数
@@ -121,7 +121,7 @@ export default function PopulationGraph({
                 key={prefData.prefCode}
                 type="monotone"
                 data={prefData.data.filter(
-                  (item) => item.year >= 1970 && item.year <= 2020
+                  (item) => item.year >= 1970 && item.year <= 2020,
                 )}
                 dataKey="value"
                 name={prefData.prefName}

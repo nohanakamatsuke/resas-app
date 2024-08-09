@@ -26,14 +26,14 @@ interface PopulationData {
 
 export const fetchPopulationData = async (
   prefCode: number,
-  populationType: populationType
+  populationType: populationType,
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/population/composition/perYear?prefCode=${prefCode}`
+      `/population/composition/perYear?prefCode=${prefCode}`,
     );
     const prefData = response.data.result.data.find(
-      (d: PopulationData) => d.label === populationType
+      (d: PopulationData) => d.label === populationType,
     );
     //
     const prefectures = await fetchPrefectures();
@@ -49,7 +49,7 @@ export const fetchPopulationData = async (
   } catch (error) {
     console.error(
       `Failed to fetch population data for prefecture ${prefCode}:`,
-      error
+      error,
     );
     return null;
   }
