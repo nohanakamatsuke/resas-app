@@ -19,10 +19,9 @@ export default function PopulationTypeSelector({
 
   return (
     <div className="mb-6">
-      <h3 className="font-bold mb-2">人口タイプ</h3>
-      <div className="flex flex-col flex-wrap gap-4">
+      <div className="flex md:flex-col items-center justify-center md:items-start gap-4 ">
         {types.map((type) => (
-          <label key={type} className="flex items-center space-x-2">
+          <label key={type} className="flex space-x-2">
             <input
               type="radio"
               value={type}
@@ -30,7 +29,7 @@ export default function PopulationTypeSelector({
               onChange={() => onTypeChange(type)}
               className="form-radio"
             />
-            <span>{type}</span>
+            <span className="text-xs">{type}</span>
           </label>
         ))}
       </div>

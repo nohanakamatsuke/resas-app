@@ -24,7 +24,7 @@ export default function PrefectureSelector({
     onSelectionChange(newSelection);
   };
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-6">
+    <div className="w-800 grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-6 text-xs sm:text-sm md:text-lg">
       {prefectures.map((pref) => (
         <label key={pref.prefCode} className="flex items-center space-x-2">
           <input

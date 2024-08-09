@@ -32,23 +32,23 @@ const Home = () => {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-8">
-      <div className="text-xl font-bold mb-9 border border-white rounded p-2">
+    <main className="flex min-h-screen flex-col items-center">
+      <div className="text-xs hidden sm:block md:text-base  mb-3 md:mb-6 border border-white rounded p-1">
         都道府県一覧
       </div>
-      <div className="flex flex-wrap justify-center max-w-10xl gap-4">
+      <div className="flex flex-wrap justify-center max-w-15xl gap-4">
         <PrefectureSelector
           selectedPrefectures={selectedPrefectures}
           onSelectionChange={setSelectedPrefectures}
         />
-        <div className="flex gap-10">
-          <PopulationGraph
-            selectedPrefectures={selectedPrefectures}
-            populationType={populationType}
-          />
+        <div className="md:flex md:flex-row-reverse gap-5 justify-center">
           <PopulationTypeSelector
             selectedType={populationType}
             onTypeChange={setPopulationType}
+          />
+          <PopulationGraph
+            selectedPrefectures={selectedPrefectures}
+            populationType={populationType}
           />
         </div>
       </div>

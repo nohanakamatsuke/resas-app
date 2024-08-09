@@ -1,11 +1,13 @@
 import { fetchPopulationData } from "@/lib/api";
 import { populationType } from "@/types";
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import {
   CartesianGrid,
   Legend,
   Line,
   LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -27,6 +29,8 @@ export default function PopulationGraph({
   populationType,
 }: Props) {
   const [data, setData] = useState<PopulationData[]>([]);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 600px)" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,53 +81,57 @@ export default function PopulationGraph({
   const dummyData = ticks.map((year) => ({ year, value: 0 }));
 
   return (
-    <div className="">
-      <LineChart
-        width={800}
-        height={400}
-        data={chartData.length ? chartData : dummyData}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis
-          dataKey="year"
-          type="number"
-          domain={[1970, 2020]}
-          ticks={[1970, 1980, 1990, 2000, 2010, 2020]}
-          tickFormatter={(value) => (value === 1970 ? "" : value)}
-        />
-        <YAxis
-          width={100}
-          tickFormatter={(value) =>
-            value === 0 ? "" : new Intl.NumberFormat("ja-JP").format(value)
-          }
-          domain={[0, yAxisMax]}
-          tickCount={6} // メモリの数
-        />
-        <Tooltip />
-        <Legend verticalAlign="bottom" align="center" layout="horizontal" />
-        {data.length > 0 ? (
-          data.map((prefData, index) => (
-            <Line
-              key={prefData.prefCode}
-              type="monotone"
-              data={prefData.data.filter(
-                (item) => item.year >= 1970 && item.year <= 2020
-              )}
-              dataKey="value"
-              name={prefData.prefName}
-              stroke={`hsl(${index * 30}, 70%, 50%)`}
-            />
-          ))
-        ) : (
-          <Line
-            type="monotone"
-            data={dummyData}
-            dataKey="value"
-            stroke="transparent"
-            name="No Data"
+    <div className="w-full md:w-10/12">
+      <ResponsiveContainer width="100%" height={350}>
+        <LineChart
+          width={1000}
+          height={400}
+          data={chartData.length ? chartData : dummyData}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="year"
+            type="number"
+            domain={[1970, 2020]}
+            ticks={[1970, 1980, 1990, 2000, 2010, 2020]}
+            tickFormatter={(value) => (value === 1970 ? "" : value)}
+            tick={{ fontSize: isMobile ? 12 : 16 }} // スマホの時はフォントサイズを小さく
           />
-        )}
-      </LineChart>
+          <YAxis
+            width={80}
+            tickFormatter={(value) =>
+              value === 0 ? "" : new Intl.NumberFormat("ja-JP").format(value)
+            }
+            domain={[0, yAxisMax]}
+            tick={{ fontSize: isMobile ? 12 : 16 }} // スマホの時はフォントサイズを小さく
+            tickCount={6} // メモリの数
+          />
+          <Tooltip />
+          <Legend verticalAlign="bottom" align="center" layout="horizontal" />
+          {data.length > 0 ? (
+            data.map((prefData, index) => (
+              <Line
+                key={prefData.prefCode}
+                type="monotone"
+                data={prefData.data.filter(
+                  (item) => item.year >= 1970 && item.year <= 2020
+                )}
+                dataKey="value"
+                name={prefData.prefName}
+                stroke={`hsl(${index * 30}, 70%, 50%)`}
+              />
+            ))
+          ) : (
+            <Line
+              type="monotone"
+              data={dummyData}
+              dataKey="value"
+              stroke="transparent"
+              name="No Data"
+            />
+          )}
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }
